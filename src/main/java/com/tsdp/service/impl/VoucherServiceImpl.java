@@ -7,6 +7,7 @@ import com.tsdp.mapper.VoucherMapper;
 import com.tsdp.entity.SeckillVoucher;
 import com.tsdp.service.ISeckillVoucherService;
 import com.tsdp.service.IVoucherService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @since 2022-11-9
  */
 @Service
+@Slf4j
 public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> implements IVoucherService {
 
     @Resource
@@ -31,6 +33,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
     public Result queryVoucherOfShop(Long shopId) {
         // 查询优惠券信息
         List<Voucher> vouchers = getBaseMapper().queryVoucherOfShop(shopId);
+        //log.info(vouchers.toString());
         // 返回结果
         return Result.ok(vouchers);
     }
@@ -47,5 +50,10 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
         seckillVoucher.setBeginTime(voucher.getBeginTime());
         seckillVoucher.setEndTime(voucher.getEndTime());
         seckillVoucherService.save(seckillVoucher);
+    }
+
+    @Override
+    public void saveVoucher(Voucher voucher) {
+        save(voucher);
     }
 }

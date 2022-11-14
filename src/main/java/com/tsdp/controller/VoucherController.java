@@ -4,9 +4,11 @@ package com.tsdp.controller;
 import com.tsdp.dto.Result;
 import com.tsdp.entity.Voucher;
 import com.tsdp.service.IVoucherService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/voucher")
+@Slf4j
 public class VoucherController {
 
     @Resource
@@ -30,7 +33,7 @@ public class VoucherController {
      */
     @PostMapping
     public Result addVoucher(@RequestBody Voucher voucher) {
-        voucherService.save(voucher);
+        voucherService.saveVoucher(voucher);
         return Result.ok(voucher.getId());
     }
 

@@ -2,6 +2,7 @@ package com.tsdp.service;
 
 import com.tsdp.entity.SeckillVoucher;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tsdp.entity.Voucher;
 
 /**
  * <p>
