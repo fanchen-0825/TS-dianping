@@ -7,5 +7,5 @@ public interface ILock {
 
     boolean tryLock(long time);
 
-    boolean unlock();
+    void unlock();
 }
