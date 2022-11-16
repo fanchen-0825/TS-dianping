@@ -16,6 +16,8 @@ import com.tsdp.utils.ILock;
 import com.tsdp.utils.RedisIdWorker;
 import com.tsdp.utils.SimpleRedisLock;
 import com.tsdp.utils.UserHolder;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -45,9 +48,12 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
 
     @Override
-    public Result seckillVoucher(Long id) {
+    public Result seckillVoucher(Long id) throws InterruptedException {
         // 根据id查询秒杀券
         SeckillVoucher seckillVoucher = seckillVoucherService.getById(id);
         // 不存在 返回错误
@@ -76,7 +82,9 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         //获取分布式锁
         Long userId = UserHolder.getUser().getId();
         SimpleRedisLock lock = new SimpleRedisLock("order:" + userId, stringRedisTemplate);
-        boolean tryLock = lock.tryLock(1200);
+        boolean tryLock = lock.tryLock(10);
+//        RLock lock = redissonClient.getLock("order:" + userId);
+//        boolean tryLock = lock.tryLock(1,10, TimeUnit.SECONDS);
 
         //获取失败 返回错误
         if (!tryLock) {

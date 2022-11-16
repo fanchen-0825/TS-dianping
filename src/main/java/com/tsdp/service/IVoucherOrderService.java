@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-11-9
  */
 public interface IVoucherOrderService extends IService<VoucherOrder> {
-    Result seckillVoucher(Long id);
+    Result seckillVoucher(Long id) throws InterruptedException;
 
     Result createVoucherOrder(SeckillVoucher seckillVoucher);
 }
